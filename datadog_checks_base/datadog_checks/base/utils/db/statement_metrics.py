@@ -46,7 +46,7 @@ class StatementMetrics:
         for row in rows:
             row_key = key(row)
             if row_key in new_cache:
-                self.log.warning(
+                self.log.debug(
                     'Collision in cached query metrics. Dropping existing row, row_key=%s new=%s dropped=%s',
                     row_key,
                     row,
