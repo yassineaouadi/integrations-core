@@ -1,13 +1,30 @@
-# (C) Datadog, Inc. 2019-present
+# (C) Datadog, Inc. 2020-present
 # All rights reserved
 # Licensed under a 3-clause BSD style license (see LICENSE)
+
+from collections import namedtuple
+
 from ..utils import default_option_example, normalize_source_name
+
+
+Validation = namedtuple('Validation', 'key, type, required, default, children')
 
 
 def spec_validator(spec, loader):
     if not isinstance(spec, dict):
         loader.errors.append(f'{loader.source}: {loader.spec_type} specifications must be a mapping object')
         return
+
+    validations = [
+        Validation('name', str, True, None, None),
+        Validation('version', str, False, None),
+        Validation('options', str, False, 'valid_options'),
+        Validation('files', list, True, None),
+    ]
+
+    valid_options = [
+        Validation('autodiscovery', bool, False, False, None)
+    ]
 
     if 'name' not in spec:
         loader.errors.append(
